@@ -15,13 +15,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\FulgensConsole.Native.dll" Link="FulgensConsole.Native.dll">
+    <None Include="..\build\FulgensConsole.Native.dll" Link="FulgensConsole.Native.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="SharpNoise" Version="0.11.0" />
   </ItemGroup>
 
   <ItemGroup>

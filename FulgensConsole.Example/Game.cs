@@ -1,5 +1,4 @@
 ﻿using FulgensConsole.Font;
-using SharpNoise.Modules;
 using System;
 using System.Collections.Generic;
 using System.Text;

@@ -13,86 +13,86 @@ namespace FulgensConsole
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "initialize",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr NativeInitialize(int width, int height, string title);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "dispose",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeCleanup(IntPtr shell);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "quitting",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern bool NativeQuitting(IntPtr shell);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "update",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeUpdate(IntPtr shell);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "quit",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeQuit(IntPtr shell);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "resize",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeResize(IntPtr shell, int width, int height);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "load_ttf_font",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr NativeLoadTrueTypeFont(IntPtr shell, string path, int size);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "draw_text",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeDrawText(IntPtr shell, IntPtr font, string contents,
             int x, int y, int r, int g, int b, int a);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "clear",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeClear(IntPtr shell);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "flip_buffer",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeFlipBuffer(IntPtr shell);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "disposed",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern bool NativeDisposed(IntPtr shell);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "get_key_down",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern int NativeGetKeyDown(IntPtr shell);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "get_key_up",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern int NativeGetKeyUp(IntPtr shell);
 
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "get_input_text",
             ExactSpelling = false,
-            CallingConvention = CallingConvention.StdCall)]
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeGetInputText(IntPtr shell, StringBuilder text);
 
         private IntPtr _nativeShell;

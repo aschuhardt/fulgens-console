@@ -1,9 +1,18 @@
 #include <vector>
 #include <queue>
 #include <cstdio>
+#include <string.h>
 #include <string>
+
+#define SDL_MAIN_HANDLED
 #include <SDL.h>
 #include <SDL_ttf.h>
+
+#ifdef _WINDLL
+	#define API __declspec(dllexport)
+#else
+	#define API
+#endif
 
 struct shell_resources
 {
@@ -18,11 +27,7 @@ struct shell_resources
 };
 
 extern "C" 
-#ifdef _WINDLL
-__declspec(dllexport) shell_resources * __stdcall initialize(int width, int height, const char *title)
-#else
-shell_resources *initialize(int width, int height, const char *title)
-#endif // _WINDLL
+API shell_resources *initialize(int width, int height, const char *title)
 {
 	shell_resources *resources = new shell_resources;
 
@@ -52,11 +57,7 @@ shell_resources *initialize(int width, int height, const char *title)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) void __stdcall dispose(void *res)
-#else
-void dispose(void *res)
-#endif // _WINDLL
+API void dispose(void *res)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return;
@@ -75,11 +76,7 @@ void dispose(void *res)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) bool __stdcall disposed(void *res)
-#else
-bool disposed(void *res)
-#endif // _WINDLL
+API bool disposed(void *res)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return true;
@@ -88,11 +85,7 @@ bool disposed(void *res)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) bool __stdcall quitting(void *res)
-#else
-bool quitting(void *res)
-#endif // _WINDLL
+API bool quitting(void *res)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return true;
@@ -101,11 +94,7 @@ bool quitting(void *res)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) void __stdcall update(void *res)
-#else
-void update(void *res)
-#endif // _WINDLL
+API void update(void *res)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return;
@@ -129,11 +118,7 @@ void update(void *res)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) void __stdcall quit(void *res)
-#else
-void quit(void *res)
-#endif // _WINDLL
+API void quit(void *res)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return;
@@ -143,11 +128,7 @@ void quit(void *res)
 
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) int __stdcall get_key_down(void *res)
-#else
-int get_key_down(void *res)
-#endif // _WINDLL
+API int get_key_down(void *res)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return -1;
@@ -165,11 +146,7 @@ int get_key_down(void *res)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) int __stdcall get_key_up(void *res)
-#else
-int get_key_up(void *res)
-#endif // _WINDLL
+API int get_key_up(void *res)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return -1;
@@ -187,11 +164,7 @@ int get_key_up(void *res)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) void __stdcall get_input_text(void *res, char * text)
-#else
-void get_input_text(void *res, char * text)
-#endif // _WINDLL
+API void get_input_text(void *res, char * text)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return;
@@ -201,11 +174,7 @@ void get_input_text(void *res, char * text)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) void __stdcall resize(void *res, int width, int height)
-#else
-void resize(void *res, int width, int height)
-#endif // _WINDLL
+API void resize(void *res, int width, int height)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return;
@@ -214,11 +183,7 @@ void resize(void *res, int width, int height)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) void __stdcall clear(void *res)
-#else
-void clear(void *res, int width, int height)
-#endif // _WINDLL
+API void clear(void *res)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return;
@@ -227,11 +192,7 @@ void clear(void *res, int width, int height)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) void __stdcall flip_buffer(void *res)
-#else
-void flip_buffer(void *res, int width, int height)
-#endif // _WINDLL
+API void flip_buffer(void *res)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return;
@@ -240,11 +201,7 @@ void flip_buffer(void *res, int width, int height)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) TTF_Font * __stdcall load_ttf_font(void *res, const char *path, int size)
-#else
-TTF_Font * load_ttf_font(void *res, const char *path, int size)
-#endif // _WINDLL
+API TTF_Font * load_ttf_font(void *res, const char *path, int size)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return nullptr;
@@ -259,11 +216,7 @@ TTF_Font * load_ttf_font(void *res, const char *path, int size)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) void __stdcall ttf_text_size(void *fnt, const char *contents, int *w, int *h)
-#else
-void ttf_text_size(void *fnt, const char *contents, int *w, int *h)
-#endif // _WINDLL
+API void ttf_text_size(void *fnt, const char *contents, int *w, int *h)
 {
 	auto font = static_cast<TTF_Font*>(fnt);
 	if (font == nullptr) return;
@@ -272,11 +225,7 @@ void ttf_text_size(void *fnt, const char *contents, int *w, int *h)
 }
 
 extern "C"
-#ifdef _WINDLL
-__declspec(dllexport) void __stdcall draw_text(void *res, void *fnt, const char *contents, int x, int y, int r, int g, int b, int a)
-#else
-void draw_text(void *res, void *fnt, const char *contents, int x, int y, int r, int g, int b, int a)
-#endif // _WINDLL
+API void draw_text(void *res, void *fnt, const char *contents, int x, int y, int r, int g, int b, int a)
 {
 	auto resources = static_cast<shell_resources*>(res);
 	if (resources == nullptr) return;
