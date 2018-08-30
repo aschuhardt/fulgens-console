@@ -12,10 +12,13 @@ A text-based graphical front-end for games or GUI applications leveraging SDL2 a
 # Build Instructions
 
 ## Windows
+- Download the SDL2 and SDL_ttf libraries and headers and install them someplace meaningful.
+### MinGW64
 - Install MinGW64.
-- Download the SDL2 and SDL_ttf libraries and headers and install them in the appropriate locations in your MinGW directory.
 - Set your `MINGW_DIR` environment variable to the root of your MinGW64 installation (example: C:\MinGW64).
 - Build the example application by running `build-example.ps1`.
+### Visual Studio (MSVC)
+- Use the provided solution and project files to build `FulgensConsole.Native`.
 
 ## Linux
 - Install the GNU C++ Compiler or whatever compiler you like (modify the makefile accordingly).
