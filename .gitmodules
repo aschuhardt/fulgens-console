@@ -1,0 +1,3 @@
+[submodule "FulgensConsole.Example/FastNoise"]
+	path = FulgensConsole.Example/FastNoise
+	url = https://github.com/Auburns/FastNoise_CSharp.git

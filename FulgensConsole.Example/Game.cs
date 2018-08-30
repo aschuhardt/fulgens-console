@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Timers;
 
 namespace FulgensConsole.Example
 {
@@ -14,13 +13,13 @@ namespace FulgensConsole.Example
 
         public void OnInit(IShell shell)
         {
-            _font = shell.LoadTrueTypeFont("MorePerfectDOSVGA.ttf", 36);
+            _font = shell.LoadTrueTypeFont("MorePerfectDOSVGA.ttf", 16);
             _toggleColor = false;
         }
 
         public void OnClosing(IShell shell)
         {
-
+            Console.WriteLine("Goodbye!");
         }
 
         public void OnDraw(IShell shell)

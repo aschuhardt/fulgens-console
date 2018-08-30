@@ -8,7 +8,7 @@ COMPILER_FLAGS = \
 	-shared \
 	-Werror \
 	-fno-exceptions \
-	-std=c++17
+	-fPIC
 
 LINKER_FLAGS = \
 	-lSDL2_ttf \

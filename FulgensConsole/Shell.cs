@@ -156,6 +156,8 @@ namespace FulgensConsole
 
             quitting = true;
             updateThread.Join(30000);
+
+            state.OnClosing(this);
         }
 
         public void Close()

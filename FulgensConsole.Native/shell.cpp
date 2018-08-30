@@ -1,7 +1,6 @@
 #include <vector>
 #include <queue>
 #include <cstdio>
-#include <string.h>
 #include <string>
 
 #define SDL_MAIN_HANDLED
@@ -170,7 +169,7 @@ API void get_input_text(void *res, char * text)
 	if (resources == nullptr) return;
 
 	if (!resources->text_input.empty())
-		strcpy_s(text, resources->text_input.size() + 1, resources->text_input.c_str());
+		strcpy(text, resources->text_input.c_str());
 }
 
 extern "C"
