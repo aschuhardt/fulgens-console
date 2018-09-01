@@ -1,10 +1,11 @@
-OBJS = FulgensConsole.Native/shell.cpp
+OBJS = $(addprefix FulgensConsole.Native/src/,shell.cpp)
 
 OBJ_NAME = FulgensConsole.Native
 
 CC = g++
 
 COMPILER_FLAGS = \
+	-IFulgensConsole.Native/include \
 	-shared \
 	-Werror \
 	-fno-exceptions \
