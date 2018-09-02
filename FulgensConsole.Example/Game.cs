@@ -54,19 +54,24 @@ namespace FulgensConsole.Example
                 return;
             }
 
-            var sb = new StringBuilder(_width);
-            for (var y = 0; y < _height; y++)
-            {
-                for (var x = 0; x < _width; x++)
-                {
-                    var element = _elements[x, y];
-                    var visual = element == ElementStyle.Large ? "#" : ".";
-                    sb.Append(visual);
-                }
+            shell.Write("#", 100, 100, _font,
+                new Color(0, 0, 0), Color.White);
+            shell.Write("M", 100, 150, _font,
+                new Color(0, 0, 0), Color.White);
 
-                shell.Write(sb.ToString(), 0, y * _charHeight, _font, _toggleColor ? Color.White : new Color(255, 0, 0));
-                sb.Clear();
-            }
+            // var sb = new StringBuilder(_width);
+            // for (var y = 0; y < _height; y++)
+            // {
+            //     for (var x = 0; x < _width; x++)
+            //     {
+            //         var element = _elements[x, y];
+            //         var visual = element == ElementStyle.Large ? "#" : ".";
+            //         sb.Append(visual);
+            //     }
+
+            //     shell.Write(sb.ToString(), 0, y * _charHeight, _font, _toggleColor ? Color.White : new Color(255, 0, 0), new Color(100, 100, 200));
+            //     sb.Clear();
+            // }
         }
 
         public void OnUpdate()

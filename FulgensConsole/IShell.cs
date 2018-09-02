@@ -14,7 +14,8 @@ namespace FulgensConsole
         /// Writes text to the shell at the specified location and using the
         /// <see cref="IFont"/> instance provided
         /// </summary>
-        void Write(string contents, int x, int y, IFont font, Color color);
+        void Write(string contents, int x, int y, IFont font,
+            Color foreColor, Color? backColor = null);
         
         /// <summary>
         /// Resizes the shell window to the given parameters

@@ -1,12 +1,15 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
-namespace FulgensConsole.Font
+namespace FulgensConsole
 {
+    [StructLayout(LayoutKind.Sequential, Pack=8)]
     public struct Color
     {
         public int R, G, B, A;
 
         public static Color White = new Color(0xFF, 0xFF, 0xFF);
+        public static Color Transparent = new Color(0x00, 0x00, 0x00, 0x00);
 
         public Color(double r, double g, double b, double a = 1.0f)
         {

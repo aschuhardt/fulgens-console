@@ -47,19 +47,6 @@ namespace FulgensConsole
         private static extern void NativeResize(IntPtr shell, int width, int height);
 
         [DllImport("FulgensConsole.Native.dll",
-            EntryPoint = "load_ttf_font",
-            ExactSpelling = false,
-            CallingConvention = CallingConvention.Cdecl)]
-        private static extern IntPtr NativeLoadTrueTypeFont(IntPtr shell, string path, int size);
-
-        [DllImport("FulgensConsole.Native.dll",
-            EntryPoint = "draw_text",
-            ExactSpelling = false,
-            CallingConvention = CallingConvention.Cdecl)]
-        private static extern void NativeDrawText(IntPtr shell, IntPtr font, string contents,
-            int x, int y, int r, int g, int b, int a);
-
-        [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "clear",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
@@ -146,8 +133,7 @@ namespace FulgensConsole
                 while (_drawOps.Count > 0)
                 {
                     var op = _drawOps.Dequeue();
-                    NativeDrawText(_nativeShell, op.Font.NativePtr, op.Contents,
-                        op.X, op.Y, op.Color.R, op.Color.G, op.Color.B, op.Color.A);
+                    op.Font.Draw(_nativeShell, op.X, op.Y, op.Contents, op.ForeColor, op.BackColor);
                 }
                 NativeFlipBuffer(_nativeShell);
 
@@ -167,10 +153,7 @@ namespace FulgensConsole
 
         public IFont LoadTrueTypeFont(string path, int size)
         {
-            var nativeFont = NativeLoadTrueTypeFont(_nativeShell, path, size);
-            if (nativeFont == IntPtr.Zero)
-                throw new Exception($"Failed to load TrueType font at {path}!");
-            return new TrueTypeFont(nativeFont);
+            return new TrueTypeFont(_nativeShell, path, size);
         }
 
         public void Resize(int width, int height)
@@ -178,7 +161,8 @@ namespace FulgensConsole
             NativeResize(_nativeShell, width, height);
         }
 
-        public void Write(string contents, int x, int y, IFont font, Color color)
+        public void Write(string contents, int x, int y, IFont font,
+            Color foreColor, Color? backColor = null)
         {
             if (string.IsNullOrEmpty(contents))
                 return;
@@ -186,7 +170,8 @@ namespace FulgensConsole
             {
                 X = x,
                 Y = y,
-                Color = color,
+                ForeColor = foreColor,
+                BackColor = backColor,
                 Contents = contents,
                 Font = font
             });

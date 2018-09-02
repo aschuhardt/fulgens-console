@@ -150,6 +150,8 @@ void clear(void *res)
   auto resources = static_cast<shell_resources*>(res);
   if (resources == nullptr) return;
 
+  SDL_SetRenderDrawBlendMode(resources->renderer, SDL_BLENDMODE_NONE);
+  SDL_SetRenderDrawColor(resources->renderer, 0x00, 0x00, 0x00, 0xFF);
   SDL_RenderClear(resources->renderer);
 }
 
@@ -183,7 +185,7 @@ void ttf_text_size(void *fnt, const char *contents, int *w, int *h)
   TTF_SizeText(font, contents, w, h);
 }
 
-void draw_text(void *res, void *fnt, const char *contents, int x, int y, int r, int g, int b, int a)
+void draw_text(void *res, void *fnt, const char *contents, int x, int y, color foreColor, color backColor)
 {
   auto resources = static_cast<shell_resources*>(res);
   if (resources == nullptr) return;
@@ -191,8 +193,10 @@ void draw_text(void *res, void *fnt, const char *contents, int x, int y, int r, 
   auto font = static_cast<TTF_Font*>(fnt);
   if (font == nullptr) return;
 
-  SDL_Color color = { r, g, b, a };
-  auto surface = TTF_RenderText_Solid(font, contents, color);
+  SDL_Color fc = { foreColor.R, foreColor.G, foreColor.B, foreColor.A };
+  auto surface = fc.a < 255
+    ? TTF_RenderText_Blended(font, contents, fc)
+    : TTF_RenderText_Solid(font, contents, fc);
   if (!surface)
   {
     fprintf(stderr, "Failed to render TrueType font: %s", TTF_GetError());
@@ -212,6 +216,24 @@ void draw_text(void *res, void *fnt, const char *contents, int x, int y, int r, 
     bounds.x = x;
     bounds.y = y;
     SDL_QueryTexture(texture, NULL, NULL, &bounds.w, &bounds.h);
+
+    // if we've gotten to this point, we have the final texture bounds and can
+    // therefore draw the background color
+    //
+    // avoid an unnecessary draw call by skipping any backgrounds that would
+    // be fully transparent
+    if (backColor.A > 0)
+    {
+      SDL_SetRenderDrawBlendMode(resources->renderer,
+        backColor.A < 255
+        ? SDL_BLENDMODE_BLEND
+        : SDL_BLENDMODE_NONE);
+
+      SDL_Color bc = { backColor.R, backColor.G, backColor.B, backColor.A };    
+      SDL_SetRenderDrawColor(resources->renderer, bc.r, bc.g, bc.b, bc.a);
+
+      SDL_RenderFillRect(resources->renderer, &bounds);
+    }
 
     SDL_RenderCopy(resources->renderer, texture, NULL, &bounds);
 

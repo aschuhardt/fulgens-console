@@ -9,7 +9,8 @@ namespace FulgensConsole
     {
         public int X { get; set; }
         public int Y { get; set; }
-        public Color Color { get; set; }
+        public Color ForeColor { get; set; }
+        public Color? BackColor { get; set; }
         public string Contents { get; set; }
         public IFont Font { get; set; }
     }

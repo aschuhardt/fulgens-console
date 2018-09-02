@@ -17,6 +17,13 @@
   #define API extern "C" 
 #endif
 
+#pragma pack(push, 8)
+struct color
+{
+  int R, G, B, A;
+};
+#pragma pack(pop)
+
 struct shell_resources
 {
   SDL_Renderer *renderer;
@@ -57,6 +64,6 @@ API TTF_Font * load_ttf_font(void *res, const char *path, int size);
 
 API void ttf_text_size(void *fnt, const char *contents, int *w, int *h);
 
-API void draw_text(void *res, void *fnt, const char *contents, int x, int y, int r, int g, int b, int a);
+API void draw_text(void *res, void *fnt, const char *contents, int x, int y, color foreColor, color backColor);
 
 #endif // SHELL_H

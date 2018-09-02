@@ -11,18 +11,37 @@ namespace FulgensConsole.Font
             CallingConvention = CallingConvention.StdCall)]
         private static extern void NativeTextSize(IntPtr fnt, string contents, ref int width, ref int height);
 
+        [DllImport("FulgensConsole.Native.dll",
+            EntryPoint = "load_ttf_font",
+            ExactSpelling = false,
+            CallingConvention = CallingConvention.Cdecl)]
+        private static extern IntPtr NativeLoadTrueTypeFont(IntPtr shell, string path, int size);
+
+        [DllImport("FulgensConsole.Native.dll",
+            EntryPoint = "draw_text",
+            ExactSpelling = false,
+            CallingConvention = CallingConvention.Cdecl)]
+        private static extern void NativeDrawText(IntPtr shell, IntPtr font, string contents,
+            int x, int y, Color foreColor, Color backColor);
+
         public (int width, int height) TextSize(string contents)
         {
             int width = 0, height = 0;
-            NativeTextSize(NativePtr, contents, ref width, ref height);
+            NativeTextSize(_nativeResource, contents, ref width, ref height);
             return (width, height);
         }
 
-        public IntPtr NativePtr { get; }
-        
-        public TrueTypeFont(IntPtr ptr)
+        private IntPtr _nativeResource;
+
+        public void Draw(IntPtr nativeShell, int x, int y, string contents, Color foreColor, Color? backColor = null)
         {
-            NativePtr = ptr;
+            NativeDrawText(nativeShell, _nativeResource, contents, x, y,
+                foreColor, backColor ?? Color.Transparent);
+        }
+
+        public TrueTypeFont(IntPtr nativeShell, string path, int size)
+        {
+            _nativeResource = NativeLoadTrueTypeFont(nativeShell, path, size);
         }
     }
 }
