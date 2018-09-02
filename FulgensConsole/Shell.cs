@@ -10,6 +10,8 @@ namespace FulgensConsole
 {
     public class Shell : IShell
     {
+        #region P/Invoke
+
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "initialize",
             ExactSpelling = false,
@@ -81,6 +83,8 @@ namespace FulgensConsole
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeGetInputText(IntPtr shell, StringBuilder text);
+
+        #endregion
 
         private IntPtr _nativeShell;
         private Queue<DrawOperation> _drawOps;

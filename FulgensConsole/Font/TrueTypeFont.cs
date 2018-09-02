@@ -5,6 +5,8 @@ namespace FulgensConsole.Font
 {
     internal class TrueTypeFont : IFont
     {
+        #region P/Invoke
+
         [DllImport("FulgensConsole.Native.dll",
             EntryPoint = "ttf_text_size",
             ExactSpelling = false,
@@ -30,6 +32,8 @@ namespace FulgensConsole.Font
             NativeTextSize(_nativeResource, contents, ref width, ref height);
             return (width, height);
         }
+
+        #endregion
 
         private IntPtr _nativeResource;
 
