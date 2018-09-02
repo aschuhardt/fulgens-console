@@ -26,6 +26,7 @@ namespace FulgensConsole.Example
         private int _charWidth;
         private int _charHeight;
         private const float NoiseScale = 10.0f;
+        private bool _shouldQuit;
 
         public void OnInit(IShell shell)
         {
@@ -37,6 +38,7 @@ namespace FulgensConsole.Example
             _height = 600 / _charHeight;
             _elements = new ElementStyle[_width, _height];
             _noise = new FastNoise(new Random().Next());
+            _shouldQuit = false;
         }
 
         public void OnClosing(IShell shell)
@@ -46,6 +48,12 @@ namespace FulgensConsole.Example
 
         public void OnDraw(IShell shell)
         {
+            if (_shouldQuit)
+            {
+                shell.Close();
+                return;
+            }
+
             var sb = new StringBuilder(_width);
             for (var y = 0; y < _height; y++)
             {
@@ -71,7 +79,10 @@ namespace FulgensConsole.Example
 
         public void OnKeyUp(Key key)
         {
-
+            if (key == Key.ESCAPE)
+            {
+                _shouldQuit = true;
+            }
         }
 
         public void OnKeyDown(Key key)
