@@ -2,107 +2,99 @@
 
 shell_resources *initialize(int width, int height, const char *title)
 {
-  shell_resources *resources = new shell_resources;
-  resources->quitting = false;
-  resources->disposed = false;
-  resources->text_input = std::string();
+  shell_resources *res = new shell_resources;
+  res->quitting = false;
+  res->disposed = false;
+  res->text_input = std::string();
 
   if (SDL_Init(SDL_INIT_VIDEO) < 0)
   {
-    free(resources);
-    fprintf(stderr, "Failed to initialize SDL: %s", SDL_GetError());
+    free(res);
+    fprintf(stderr, "Failed to initialize SDL: %s\n", SDL_GetError());
     return nullptr;
   }
 
   if (TTF_Init() < 0)
   {
-    free(resources);
-    fprintf(stderr, "Failed to initialize TTF: %s", TTF_GetError());
+    free(res);
+    fprintf(stderr, "Failed to initialize TTF: %s\n", TTF_GetError());
     return nullptr;
   }
 
-  SDL_CreateWindowAndRenderer(width, height, NULL, &resources->window, &resources->renderer);
-  SDL_SetRenderDrawColor(resources->renderer, 0x00, 0x00, 0x00, 0xFF);
-  SDL_SetWindowTitle(resources->window, title);
+  if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG))
+  {
+    free(res);
+    fprintf(stderr, "Failed to initialize IMG: %s\n", IMG_GetError());
+    return nullptr;
+  }
 
-  return resources;
+  SDL_CreateWindowAndRenderer(width, height, NULL, &res->window, &res->renderer);
+  SDL_SetRenderDrawColor(res->renderer, 0x00, 0x00, 0x00, 0xFF);
+  SDL_SetWindowTitle(res->window, title);
+
+  return res;
 }
 
-void dispose(void *res)
+void dispose(shell_resources *res)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return;
-
-  for (auto font : resources->fonts)
+  for (auto font : res->fonts)
     if (font) TTF_CloseFont(font);
 
-  SDL_DestroyRenderer(resources->renderer);
-  SDL_DestroyWindow(resources->window);
+  for (auto texture : res->textures)
+    if (texture) SDL_DestroyTexture(texture);
 
-  free(resources);
+  SDL_DestroyRenderer(res->renderer);
+  SDL_DestroyWindow(res->window);
+
+  free(res);
 
   SDL_Quit();
 
-  resources->disposed = true;
+  res->disposed = true;
 }
 
-bool disposed(void *res)
+bool disposed(shell_resources *res)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return true;
-
-  return resources->disposed;
+  return res->disposed;
 }
 
-bool quitting(void *res)
+bool quitting(shell_resources *res)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return true;
-
-  return resources->quitting;
+  return res->quitting;
 }
 
-void update(void *res)
+void update(shell_resources *res)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return;
-
-  resources->text_input.clear();
-  while (!resources->key_down_events.empty()) resources->key_down_events.pop();
-  while (!resources->key_up_events.empty()) resources->key_up_events.pop();
+  res->text_input.clear();
+  while (!res->key_down_events.empty()) res->key_down_events.pop();
+  while (!res->key_up_events.empty()) res->key_up_events.pop();
 
   SDL_Event evt;
   while (SDL_PollEvent(&evt))
   {
     if (evt.type == SDL_QUIT)
-      resources->quitting = true;
+      res->quitting = true;
     else if (evt.type == SDL_KEYDOWN)
-      resources->key_down_events.push(evt.key.keysym.scancode);
+      res->key_down_events.push(evt.key.keysym.scancode);
     else if (evt.type == SDL_KEYUP)
-      resources->key_up_events.push(evt.key.keysym.scancode);
+      res->key_up_events.push(evt.key.keysym.scancode);
     else if (evt.type == SDL_TEXTINPUT)
-      resources->text_input += evt.text.text;
+      res->text_input += evt.text.text;
   }
 }
 
-void quit(void *res)
+void quit(shell_resources *res)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return;
-
-  resources->quitting = true;
+  res->quitting = true;
 }
 
 
-int get_key_down(void *res)
+int get_key_down(shell_resources *res)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return -1;
-
-  if (!resources->key_down_events.empty())
+  if (!res->key_down_events.empty())
   {
-    int code = resources->key_down_events.front();
-    resources->key_down_events.pop();
+    int code = res->key_down_events.front();
+    res->key_down_events.pop();
     return code;
   }
   else
@@ -111,15 +103,12 @@ int get_key_down(void *res)
   }
 }
 
-int get_key_up(void *res)
+int get_key_up(shell_resources *res)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return -1;
-
-  if (!resources->key_up_events.empty())
+  if (!res->key_up_events.empty())
   {
-    auto code = resources->key_up_events.front();
-    resources->key_up_events.pop();
+    auto code = res->key_up_events.front();
+    res->key_up_events.pop();
     return code;
   }
   else
@@ -128,71 +117,47 @@ int get_key_up(void *res)
   }
 }
 
-void get_input_text(void *res, char * text)
+void get_input_text(shell_resources *res, char * text)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return;
-
-  if (!resources->text_input.empty())
-    strcpy(text, resources->text_input.c_str());
+  if (!res->text_input.empty())
+    strcpy(text, res->text_input.c_str());
 }
 
-void resize(void *res, int width, int height)
+void resize(shell_resources *res, int width, int height)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return;
-
-  SDL_SetWindowSize(resources->window, width, height);
+  SDL_SetWindowSize(res->window, width, height);
 }
 
-void clear(void *res)
+void clear(shell_resources *res)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return;
-
-  SDL_SetRenderDrawBlendMode(resources->renderer, SDL_BLENDMODE_NONE);
-  SDL_SetRenderDrawColor(resources->renderer, 0x00, 0x00, 0x00, 0xFF);
-  SDL_RenderClear(resources->renderer);
+  SDL_SetRenderDrawBlendMode(res->renderer, SDL_BLENDMODE_NONE);
+  SDL_SetRenderDrawColor(res->renderer, 0x00, 0x00, 0x00, 0xFF);
+  SDL_RenderClear(res->renderer);
 }
 
-void flip_buffer(void *res)
+void flip_buffer(shell_resources *res)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return;
-
-  SDL_RenderPresent(resources->renderer);
+  SDL_RenderPresent(res->renderer);
 }
 
-TTF_Font * load_ttf_font(void *res, const char *path, int size)
+TTF_Font * load_ttf_font(shell_resources *res, const char *path, int size)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return nullptr;
-
   auto font = TTF_OpenFont(path, size);
   if (!font)
     fprintf(stderr, "Failed to load TrueType font: %s", TTF_GetError());
   else
-    resources->fonts.push_back(font);
+    res->fonts.push_back(font);
 
   return font;
 }
 
-void ttf_text_size(void *fnt, const char *contents, int *w, int *h)
+void ttf_text_size(TTF_Font *font, const char *contents, int *w, int *h)
 {
-  auto font = static_cast<TTF_Font*>(fnt);
-  if (font == nullptr) return;
-
   TTF_SizeText(font, contents, w, h);
 }
 
-void draw_text(void *res, void *fnt, const char *contents, int x, int y, color foreColor, color backColor)
+void draw_text(shell_resources *res, TTF_Font *font, const char *contents, int x, int y, color foreColor, color backColor)
 {
-  auto resources = static_cast<shell_resources*>(res);
-  if (resources == nullptr) return;
-
-  auto font = static_cast<TTF_Font*>(fnt);
-  if (font == nullptr) return;
-
   SDL_Color fc = { foreColor.R, foreColor.G, foreColor.B, foreColor.A };
   auto surface = fc.a < 255
     ? TTF_RenderText_Blended(font, contents, fc)
@@ -203,7 +168,7 @@ void draw_text(void *res, void *fnt, const char *contents, int x, int y, color f
   }
   else
   {
-    auto texture = SDL_CreateTextureFromSurface(resources->renderer, surface);
+    auto texture = SDL_CreateTextureFromSurface(res->renderer, surface);
     SDL_FreeSurface(surface);
 
     if (!texture)
@@ -224,20 +189,40 @@ void draw_text(void *res, void *fnt, const char *contents, int x, int y, color f
     // be fully transparent
     if (backColor.A > 0)
     {
-      SDL_SetRenderDrawBlendMode(resources->renderer,
+      SDL_SetRenderDrawBlendMode(res->renderer,
         backColor.A < 255
         ? SDL_BLENDMODE_BLEND
         : SDL_BLENDMODE_NONE);
 
       SDL_Color bc = { backColor.R, backColor.G, backColor.B, backColor.A };    
-      SDL_SetRenderDrawColor(resources->renderer, bc.r, bc.g, bc.b, bc.a);
+      SDL_SetRenderDrawColor(res->renderer, bc.r, bc.g, bc.b, bc.a);
 
-      SDL_RenderFillRect(resources->renderer, &bounds);
+      SDL_RenderFillRect(res->renderer, &bounds);
     }
 
-    SDL_RenderCopy(resources->renderer, texture, NULL, &bounds);
+    SDL_RenderCopy(res->renderer, texture, NULL, &bounds);
 
     SDL_DestroyTexture(texture);
   }
 }
 
+SDL_Texture * load_image(shell_resources *res, const char *path)
+{
+  auto surface = IMG_Load(path);
+  if (!surface)
+  {
+    fprintf(stderr, "Failed to load image \"%s\": %s\n", path, IMG_GetError());
+    return nullptr;
+  }
+  else
+  {
+    auto texture = SDL_CreateTextureFromSurface(res->renderer, surface);
+    SDL_FreeSurface(surface);
+    if (!texture)
+    {
+      fprintf(stderr, "Failed to create texture from loaded image \"\"%s\n", path, SDL_GetError());
+      return nullptr;
+    }
+    return texture;
+  }
+}

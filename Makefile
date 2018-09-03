@@ -13,6 +13,7 @@ COMPILER_FLAGS = \
 
 LINKER_FLAGS = \
 	-lSDL2_ttf \
+	-lSDL2_image \
 	-lstdc++
 
 BUILD_DIR = build

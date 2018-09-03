@@ -53,7 +53,7 @@ namespace FulgensConsole.Example
                 shell.Close();
                 return;
             }
-            this.
+            
             var sb = new StringBuilder(_width);
             for (var y = 0; y < _height; y++)
             {
