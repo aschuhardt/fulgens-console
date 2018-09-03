@@ -1,4 +1,4 @@
-﻿using FulgensConsole.Font;
+using FulgensConsole.Font;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -53,25 +53,20 @@ namespace FulgensConsole.Example
                 shell.Close();
                 return;
             }
+            this.
+            var sb = new StringBuilder(_width);
+            for (var y = 0; y < _height; y++)
+            {
+                for (var x = 0; x < _width; x++)
+                {
+                    var element = _elements[x, y];
+                    var visual = element == ElementStyle.Large ? "#" : ".";
+                    sb.Append(visual);
+                }
 
-            shell.Write("#", 100, 100, _font,
-                new Color(0, 0, 0), Color.White);
-            shell.Write("M", 100, 150, _font,
-                new Color(0, 0, 0), Color.White);
-
-            // var sb = new StringBuilder(_width);
-            // for (var y = 0; y < _height; y++)
-            // {
-            //     for (var x = 0; x < _width; x++)
-            //     {
-            //         var element = _elements[x, y];
-            //         var visual = element == ElementStyle.Large ? "#" : ".";
-            //         sb.Append(visual);
-            //     }
-
-            //     shell.Write(sb.ToString(), 0, y * _charHeight, _font, _toggleColor ? Color.White : new Color(255, 0, 0), new Color(100, 100, 200));
-            //     sb.Clear();
-            // }
+                shell.Write(sb.ToString(), 0, y * _charHeight, _font, _toggleColor ? Color.White : new Color(255, 0, 0));
+                sb.Clear();
+            }
         }
 
         public void OnUpdate()
