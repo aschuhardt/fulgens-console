@@ -18,6 +18,10 @@ LINKER_FLAGS = \
 
 BUILD_DIR = build
 
+ifneq ($(FULGENS_SOFTWARE_RENDERER),)
+	COMPILER_FLAGS += -DFULGENS_USE_SOFTWARE_RENDERER
+endif
+
 ifeq ($(OS),Windows_NT)
 	ifneq ($(MINGW_DIR),)
 		CLEAN_BUILD_DIR := del /S /Q $(BUILD_DIR)

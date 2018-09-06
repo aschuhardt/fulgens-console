@@ -18,6 +18,12 @@
   #define API extern "C" 
 #endif
 
+#ifdef FULGENS_USE_SOFTWARE_RENDERER
+  #define FULGENS_RENDERER_FLAGS SDL_RENDERER_SOFTWARE
+#else
+  #define FULGENS_RENDERER_FLAGS SDL_RENDERER_ACCELERATED
+#endif
+
 #pragma pack(push, 8)
 
 struct color

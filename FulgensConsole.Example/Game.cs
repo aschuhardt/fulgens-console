@@ -30,7 +30,7 @@ namespace FulgensConsole.Example
 
         public void OnInit(IShell shell)
         {
-            _font = shell.LoadTrueTypeFont("MorePerfectDOSVGA.ttf", 16);
+            _font = shell.LoadTrueTypeFont("MorePerfectDOSVGA.ttf", 32);
             (_charWidth, _charHeight) = _font.TextSize("M");
             _toggleColor = false;
             _currentZ = 0.00001f;

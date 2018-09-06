@@ -27,10 +27,9 @@ shell_resources *initialize(int width, int height, const char *title)
     fprintf(stderr, "Failed to initialize IMG: %s\n", IMG_GetError());
     return nullptr;
   }
-
-  SDL_CreateWindowAndRenderer(width, height, NULL, &res->window, &res->renderer);
-  SDL_SetRenderDrawColor(res->renderer, 0x00, 0x00, 0x00, 0xFF);
-  SDL_SetWindowTitle(res->window, title);
+  
+  res->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, NULL);
+  res->renderer = SDL_CreateRenderer(res->window, -1, FULGENS_RENDERER_FLAGS);
 
   return res;
 }
