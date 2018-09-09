@@ -7,19 +7,19 @@ namespace FulgensConsole.Font
     {
         #region P/Invoke
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "ttf_text_size",
             ExactSpelling = false,
             CallingConvention = CallingConvention.StdCall)]
         private static extern void NativeTextSize(IntPtr fnt, string contents, ref int width, ref int height);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "load_ttf_font",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr NativeLoadTrueTypeFont(IntPtr shell, string path, int size);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "draw_text",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]

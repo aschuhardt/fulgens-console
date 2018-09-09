@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -12,73 +12,73 @@ namespace FulgensConsole
     {
         #region P/Invoke
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "initialize",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr NativeInitialize(int width, int height, string title);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "dispose",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeCleanup(IntPtr shell);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "quitting",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern bool NativeQuitting(IntPtr shell);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "update",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeUpdate(IntPtr shell);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "quit",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeQuit(IntPtr shell);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "resize",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeResize(IntPtr shell, int width, int height);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "clear",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeClear(IntPtr shell);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "flip_buffer",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern void NativeFlipBuffer(IntPtr shell);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "disposed",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern bool NativeDisposed(IntPtr shell);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "get_key_down",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern int NativeGetKeyDown(IntPtr shell);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "get_key_up",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
         private static extern int NativeGetKeyUp(IntPtr shell);
 
-        [DllImport("FulgensConsole.Native.dll",
+        [DllImport("fulgens",
             EntryPoint = "get_input_text",
             ExactSpelling = false,
             CallingConvention = CallingConvention.Cdecl)]
@@ -95,7 +95,7 @@ namespace FulgensConsole
             _nativeShell = NativeInitialize(width, height, title);
             if (_nativeShell == IntPtr.Zero)
                 throw new Exception("Failed to initialize the shell!");
-
+            this.
             _drawOps = new Queue<DrawOperation>();
             _stateLock = new object();
         }
@@ -143,7 +143,7 @@ namespace FulgensConsole
 
                 Thread.Sleep(33);
             }
-
+            var something = new List<int>();
             quitting = true;
             updateThread.Join(30000);
 

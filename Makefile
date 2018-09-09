@@ -1,6 +1,6 @@
 OBJS = $(addprefix FulgensConsole.Native/src/,shell.cpp)
 
-OBJ_NAME = FulgensConsole.Native
+OBJ_NAME = libfulgens
 
 CC = g++
 
@@ -24,6 +24,7 @@ endif
 
 ifeq ($(OS),Windows_NT)
 	ifneq ($(MINGW_DIR),)
+		DYLIB_EXTENSION := .dll
 		CLEAN_BUILD_DIR := del /S /Q $(BUILD_DIR)
 		CLEAR := cls
 		COMPILER_FLAGS += -D_WINDLL -DWIN32 -m64 -I"$(MINGW_DIR)\include\SDL2" -Dmain=SDL_main
@@ -42,6 +43,7 @@ ifeq ($(OS),Windows_NT)
 		MISSING_MINGW_DIR := YES
 	endif
 else
+	DYLIB_EXTENSION := .so
 	CLEAN_BUILD_DIR := rm -rf $(BUILD_DIR) && mkdir $(BUILD_DIR)
 	CLEAR := clear
 	COMPILER_FLAGS += `sdl2-config --cflags`
@@ -72,7 +74,7 @@ RELEASE_COMPILER_FLAGS = \
 .PHONY: cls clean all compile
 
 compile: $(OBJS)
-	$(CC) $(OBJS) $(RELEASE_COMPILER_FLAGS) $(LINKER_FLAGS) -o $(BUILD_DIR)/$(OBJ_NAME).dll
+	$(CC) $(OBJS) $(RELEASE_COMPILER_FLAGS) $(LINKER_FLAGS) -o $(BUILD_DIR)/$(OBJ_NAME)$(DYLIB_EXTENSION)
 
 cls:
 	$(CLEAR)
